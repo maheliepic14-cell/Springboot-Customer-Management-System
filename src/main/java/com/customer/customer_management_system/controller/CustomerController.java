@@ -2,6 +2,7 @@ package com.customer.customer_management_system.controller;
 
 import com.customer.customer_management_system.entity.Customer;
 import com.customer.customer_management_system.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +27,10 @@ public class CustomerController {
     }
 
     //tells java to read the incoming json and convert it into a java customer object
+    //@Valid tells spring to check validation annotation before calling the method
+    //if validation fails spring will reject the request
     @PostMapping
-    public Customer addCustomer(@RequestBody Customer customer){
+    public Customer addCustomer(@Valid @RequestBody Customer customer){
         return customerService.saveCustomer(customer);
     }
 
@@ -38,7 +41,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer customer){
+    public Customer updateCustomer(@Valid @PathVariable Long id, @RequestBody Customer customer){
         //assigns the URL ID to that object
         customer.setId(id);
         return customerService.saveCustomer(customer);
