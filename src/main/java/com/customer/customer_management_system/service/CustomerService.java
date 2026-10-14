@@ -2,6 +2,8 @@ package com.customer.customer_management_system.service;
 
 import com.customer.customer_management_system.entity.Customer;
 import com.customer.customer_management_system.repository.CustomerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,6 +50,11 @@ public class CustomerService {
 
     public List<Customer>searchCustomers(String keyword){
         return customerRepository.findByNameContainingOrAddressContainingOrPhoneContainingOrEmailContaining(keyword, keyword, keyword, keyword);
+
+    }
+
+    public Page<Customer> getCustomers(Pageable pageable){
+        return customerRepository.findAll(pageable);
 
     }
 
