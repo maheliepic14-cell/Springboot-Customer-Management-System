@@ -48,10 +48,7 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     public Customer updateCustomer(@Valid @PathVariable Long id, @RequestBody Customer customer){
-        //assigns the URL ID to that object
-        customer.setId(id);
-        return customerService.saveCustomer(customer);
-
+        return customerService.updateCustomer(id, customer);
     }
 
     @DeleteMapping("/{id}")

@@ -41,6 +41,19 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+    public Customer updateCustomer(Long id, Customer customer){
+
+        boolean emailExists = customerRepository.existsByEmailIgnoreCaseAndIdNot(customer.getEmail(), id);
+
+        if (emailExists){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        }
+
+        customer.setId(id);
+        return customerRepository.save(customer);
+
+    }
+
     public List<Customer> getAllCustomers(){
         return customerRepository.findAll();
     }
