@@ -3,11 +3,12 @@ package com.customer.customer_management_system.controller;
 import com.customer.customer_management_system.entity.Customer;
 import com.customer.customer_management_system.service.CustomerService;
 import jakarta.validation.Valid;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -41,7 +42,8 @@ public class CustomerController {
     //@Path variable reads the id from the url and assign it to this id
     @GetMapping("/{id}")
     public Customer getCustomerById(@PathVariable Long id){
-        return customerService.getCustomerById(id).orElse(null);
+        return customerService.getCustomerById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found with id:" + id));
     }
 
     @PutMapping("/{id}")
