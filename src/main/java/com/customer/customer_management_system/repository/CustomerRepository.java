@@ -1,6 +1,8 @@
 package com.customer.customer_management_system.repository;
 
 import com.customer.customer_management_system.entity.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -16,5 +18,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     //Spring Data JPA reads the method name and generates the query implementation
     List<Customer> findByNameContainingOrAddressContainingOrPhoneContainingOrEmailContaining(String name, String address, String phone, String email);
+
+    Page<Customer> findByNameContainingOrAddressContainingOrPhoneContainingOrEmailContaining(String name, String address, String phone, String email, Pageable pageable);
 
 }

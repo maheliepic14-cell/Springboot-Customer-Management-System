@@ -48,10 +48,15 @@ public class CustomerService {
         customerRepository.deleteById(id);
     }
 
-    public List<Customer>searchCustomers(String keyword){
+    public List<Customer> searchCustomers(String keyword){
         return customerRepository.findByNameContainingOrAddressContainingOrPhoneContainingOrEmailContaining(keyword, keyword, keyword, keyword);
 
     }
+
+    public Page<Customer> searchCustomers(String keyword, Pageable pageable){
+        return customerRepository.findByNameContainingOrAddressContainingOrPhoneContainingOrEmailContaining(keyword, keyword, keyword, keyword, pageable);
+    }
+
 
     public Page<Customer> getCustomers(Pageable pageable){
         return customerRepository.findAll(pageable);
