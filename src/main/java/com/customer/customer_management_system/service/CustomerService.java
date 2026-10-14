@@ -45,4 +45,10 @@ public class CustomerService {
     public void deleteCustomer(Long id){
         customerRepository.deleteById(id);
     }
+
+    public List<Customer>searchCustomers(String keyword){
+        return customerRepository.findByNameContainingOrAddressContainingOrPhoneContainingOrEmailContaining(keyword, keyword, keyword, keyword);
+
+    }
+
 }

@@ -53,5 +53,10 @@ public class CustomerController {
         customerService.deleteCustomer(id);
     }
 
+    @GetMapping("/search")
+    public List<Customer> searchCustomers(@RequestParam String keyword){
+        return customerService.searchCustomers(keyword);
+    }
+
 
 }
