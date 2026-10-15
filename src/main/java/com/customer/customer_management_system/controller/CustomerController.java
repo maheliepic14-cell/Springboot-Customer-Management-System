@@ -1,15 +1,21 @@
 package com.customer.customer_management_system.controller;
 
 import com.customer.customer_management_system.entity.Customer;
+import com.customer.customer_management_system.service.CustomerImageService;
 import com.customer.customer_management_system.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 //tells spring this class handles web requests and return response
@@ -20,9 +26,11 @@ public class CustomerController {
 
     //get the customer bean
     private final CustomerService customerService;
+    private final CustomerImageService customerImageService;
 
-    public CustomerController(CustomerService customerService){
+    public CustomerController(CustomerService customerService, CustomerImageService customerImageService){
         this.customerService = customerService;
+        this.customerImageService = customerImageService;
     }
 
     //Map http get requests to this method
@@ -34,9 +42,9 @@ public class CustomerController {
     //tells java to read the incoming json and convert it into a java customer object
     //@Valid tells spring to check validation annotation before calling the method
     //if validation fails spring will reject the request
-    @PostMapping
-    public Customer addCustomer(@Valid @RequestBody Customer customer){
-        return customerService.saveCustomer(customer);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Customer addCustomer(@Valid @RequestPart("customer") Customer customer, @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
+        return customerService.saveCustomer(customer, image);
     }
 
     //@Path variable reads the id from the url and assign it to this id
@@ -46,9 +54,9 @@ public class CustomerController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found with id:" + id));
     }
 
-    @PutMapping("/{id}")
-    public Customer updateCustomer(@Valid @PathVariable Long id, @RequestBody Customer customer){
-        return customerService.updateCustomer(id, customer);
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Customer updateCustomer(@Valid @PathVariable Long id, @RequestPart("customer") Customer customer, @RequestPart (value = "image", required = false) MultipartFile image) throws IOException {
+        return customerService.updateCustomer(id, customer, image);
     }
 
     @DeleteMapping("/{id}")
@@ -79,6 +87,23 @@ public class CustomerController {
         Pageable pageable = PageRequest.of(page, size);
 
         return customerService.searchCustomers(keyword, pageable);
+
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getCustomerImage(@PathVariable Long id) throws IOException{
+
+        Customer customer = customerService.getCustomerById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found with id:" + id));
+
+        if (customer.getImagePath() == null || customer.getImagePath().isBlank()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This customer has no profile image");
+        }
+
+        byte[] image = customerImageService.getImage(customer.getImagePath());
+
+        String contentType = customerImageService.getImageContentType(customer.getImagePath());
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, contentType).body(image);
 
     }
 

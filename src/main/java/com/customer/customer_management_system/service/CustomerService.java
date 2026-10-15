@@ -6,8 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,31 +31,48 @@ public class CustomerService {
     //this is dependency because service need this to work
     private final CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository){
+    private final CustomerImageService  customerImageService;
+
+    public CustomerService(CustomerRepository customerRepository, CustomerImageService customerImageService){
         this.customerRepository = customerRepository;
+        this.customerImageService = customerImageService;
     }
 
-    public Customer saveCustomer(Customer customer){
+    public Customer saveCustomer(Customer customer, MultipartFile image) throws IOException {
 
+        //Check whether the email exists
         if (customerRepository.existsByEmailIgnoreCase(customer.getEmail())){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
+
+        //Save the image if its provided
+        if (image != null && !image.isEmpty()){
+            String imagePath = customerImageService.saveImage(image);
+            customer.setImagePath(imagePath);
+        }
+
         return customerRepository.save(customer);
     }
 
-    public Customer updateCustomer(Long id, Customer customer){
+    public Customer updateCustomer(Long id, Customer customer, MultipartFile image) throws IOException {
 
         //Check whether the customer exists
-        if (!customerRepository.existsById(id)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found with id:" + id);
-        }
-
+        Customer existingCustomer =  customerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found with id:" + id));
 
         //Check another customer already uses this email
         boolean emailExists = customerRepository.existsByEmailIgnoreCaseAndIdNot(customer.getEmail(), id);
 
         if (emailExists){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
+        }
+
+        //Keep the existing image if new one is not provided
+        customer.setImagePath(existingCustomer.getImagePath());
+
+        if (image != null  && !image.isEmpty()){
+            String imagePath = customerImageService.saveImage(image);
+
+            customer.setImagePath(imagePath);
         }
 
         //Keep the ID from the URL

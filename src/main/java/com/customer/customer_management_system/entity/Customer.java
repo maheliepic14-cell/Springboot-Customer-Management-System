@@ -34,6 +34,7 @@ public class Customer {
     @Email(message = "Please enter a valid email address")
     private String email;
 
+    private String imagePath;
 
 
     public Long getId() {
@@ -74,5 +75,13 @@ public class Customer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
