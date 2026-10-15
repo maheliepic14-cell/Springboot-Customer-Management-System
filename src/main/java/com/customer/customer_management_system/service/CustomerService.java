@@ -43,12 +43,20 @@ public class CustomerService {
 
     public Customer updateCustomer(Long id, Customer customer){
 
+        //Check whether the customer exists
+        if (!customerRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found with id:" + id);
+        }
+
+
+        //Check another customer already uses this email
         boolean emailExists = customerRepository.existsByEmailIgnoreCaseAndIdNot(customer.getEmail(), id);
 
         if (emailExists){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
 
+        //Keep the ID from the URL
         customer.setId(id);
         return customerRepository.save(customer);
 
