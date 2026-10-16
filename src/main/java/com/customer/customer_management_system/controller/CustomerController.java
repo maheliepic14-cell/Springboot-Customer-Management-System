@@ -60,7 +60,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable Long id){
+    public void deleteCustomer(@PathVariable Long id) throws IOException{
         customerService.deleteCustomer(id);
     }
 

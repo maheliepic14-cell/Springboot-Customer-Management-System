@@ -99,13 +99,19 @@ public class CustomerService {
         return customerRepository.findById(id);
     }
 
-    public void deleteCustomer(Long id){
+    public void deleteCustomer(Long id) throws IOException {
 
-        if (!customerRepository.existsById(id)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found with id:" + id);
-        }
+        //Get the customer details
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found with id: " + id));
+
+        String imagePath = customer.getImagePath();
 
         customerRepository.deleteById(id);
+
+        //Delete the image in the upload folder
+        if (imagePath != null && !imagePath.isBlank()){
+            customerImageService.deleteImage(imagePath);
+        }
     }
 
     public List<Customer> searchCustomers(String keyword){
