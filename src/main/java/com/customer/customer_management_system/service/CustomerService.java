@@ -67,18 +67,27 @@ public class CustomerService {
         }
 
         //Keep the existing image if new one is not provided
-        customer.setImagePath(existingCustomer.getImagePath());
+        String oldImagePath = existingCustomer.getImagePath();
+        customer.setImagePath(oldImagePath);
 
+        //Save a new image if one was uploaded
         if (image != null  && !image.isEmpty()){
-            String imagePath = customerImageService.saveImage(image);
-
-            customer.setImagePath(imagePath);
+            String newImagePath = customerImageService.saveImage(image);
+            customer.setImagePath(newImagePath);
         }
 
         //Keep the ID from the URL
         customer.setId(id);
-        return customerRepository.save(customer);
+        // Save the customer record
+        Customer updatedCustomer = customerRepository.save(customer);
 
+
+        //Delete the old image after saving the new image
+        if (image !=null && !image.isEmpty() && oldImagePath != null && !oldImagePath.isBlank()){
+            customerImageService.deleteImage(oldImagePath);
+        }
+
+        return updatedCustomer;
     }
 
     public List<Customer> getAllCustomers(){

@@ -129,6 +129,30 @@ public class CustomerImageService {
         );
     }
 
+    //Delete the image after user updates the existing image
+    public void deleteImage(String filename) throws IOException {
+
+        // Do nothing if there is no filename
+        if (filename == null || filename.isBlank()) {
+            return;
+        }
+
+        //Creates only the file path
+        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+
+        //Build the full path to the image
+        Path filePath = uploadPath.resolve(filename).normalize();
+
+        //Check if the file path starts with upload directory path
+        if (!filePath.startsWith(uploadPath)) {
+            throw new IllegalArgumentException("Invalid Image Filename");
+        }
+
+        //Deletes the image file if it exists
+        Files.deleteIfExists(filePath);
+
+    }
+
 
 }
 
