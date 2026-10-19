@@ -18,6 +18,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.util.List;
 
+//Add cors because frontend and backend running on different ports
+//So this tells java allows requests from port 4200
+@CrossOrigin(origins = "http://localhost:4200")
 //tells spring this class handles web requests and return response
 @RestController
 //set the url path

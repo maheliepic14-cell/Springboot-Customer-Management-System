@@ -1,0 +1,36 @@
+<div class="customer-list-page">
+  <h2>Customer List</h2>
+
+  @if (customers.length > 0){
+
+    <table>
+      <thead>
+
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+
+      </thead>
+
+      <tbody>
+      <!--creates a tabel row for every customer in the customers array-->
+      <!--gives unique identifier for each customer-->
+        @for (customer of customers; track customer.id){
+          <tr>
+            <td>{{ customer.id }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.address }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>{{ customer.email }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p>No customers to display</p>
+  }
+</div>
