@@ -136,3 +136,16 @@ tbody tr:hover {
   cursor: not-allowed;
 }
 
+.add-customer-button {
+  padding: 10px 16px;
+  background-color: #36393d;
+  color: #f5f5f5;
+  border: 1px solid #4a4e53;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.add-customer-button:hover {
+  background-color: #484d52;
+}

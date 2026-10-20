@@ -1,0 +1,133 @@
+
+.add-customer-page {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: #202326;
+  color: #f5f5f5;
+  border: 1px solid #36393d;
+  border-radius: 10px;
+}
+
+.add-customer-page h2 {
+  margin: 0 0 8px;
+  color: #c6a57a;
+}
+
+.description {
+  margin-bottom: 28px;
+  color: #b0b0b0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-group input:not([type="file"]),
+.form-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  background-color: #292d31;
+  color: #f5f5f5;
+  border: 1px solid #44484d;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #c6a57a;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #999;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-group input[type="file"] {
+  width: 100%;
+  color: #b0b0b0;
+  font: inherit;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.form-actions button {
+  padding: 11px 20px;
+  background-color: #36393d;
+  color: #f5f5f5;
+  border: 1px solid #4a4e53;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.form-actions button:hover {
+  background-color: #484d52;
+}
+
+.form-actions .cancel-button {
+  background-color: transparent;
+  color: #b0b0b0;
+}
+
+.form-actions .cancel-button:hover {
+  background-color: #292d31;
+  color: #f5f5f5;
+}
+
+@media (max-width: 600px) {
+  .add-customer-page {
+    margin: 16px auto;
+    padding: 20px;
+  }
+
+  .form-actions {
+    flex-wrap: wrap;
+  }
+}
+
+
+.error-message {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  background-color: #3a2426;
+  color: #ff8b8b;
+  border: 1px solid #754044;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.success-message {
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  background-color: #24372c;
+  color: #8ee0a5;
+  border: 1px solid #3e694b;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+

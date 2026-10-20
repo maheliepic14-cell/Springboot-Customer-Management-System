@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {CustomerService} from '../../services/customer.service';
 import {FormsModule} from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-customer-list',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule, RouterLink
   ],
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.css'

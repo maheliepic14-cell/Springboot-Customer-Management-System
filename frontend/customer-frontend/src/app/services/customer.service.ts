@@ -42,7 +42,7 @@ export class CustomerService {
   }
 
 
-  //getcustomerbypage(0,5)
+  //getCustomerByPage(0,5)
   getCustomersByPage(page: number, size: number): Observable<any> {
 
     //this returns customers data as observable
@@ -56,6 +56,34 @@ export class CustomerService {
     return this.http.get<any>(
       `${this.apiUrl}/search/page?keyword=${encodeURIComponent(keyword)}&page=${page}&size=${size}`
     );
+  }
+
+  //here we need to create a post request with the data
+  addCustomer(customer: object, image: File | null): Observable<any>{
+
+    //creates a formcata object
+    const formData = new FormData();
+
+    //add customer data
+
+    //creates a new blob object - represent piece of data
+    //convert javascript object into json string
+    //sets the content type to json
+    formData.append(
+      'customer',
+      new Blob([JSON.stringify(customer)], {
+        type: 'application/json'
+      })
+    );
+
+    if (image) {
+      formData.append('image', image);
+    }
+
+    //Http post request
+    return this.http.post(this.apiUrl, formData);
+
+
   }
 
 }

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import {CustomerListComponent} from './pages/customer-list/customer-list.component';
+import {AddCustomerComponent} from './pages/add-customer/add-customer.component';
 
 export const routes: Routes = [
   {
@@ -11,5 +12,9 @@ export const routes: Routes = [
     redirectTo: "customers",
     //Empty route matches the entire empty path
     pathMatch: "full"
-  }
+  },
+  { path: 'customers/add',
+    component: AddCustomerComponent
+  },
+
 ];
