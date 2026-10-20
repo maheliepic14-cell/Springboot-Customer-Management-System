@@ -1,27 +1,57 @@
+
 <div class="customer-list-page">
   <h2>Customer List</h2>
 
-  @if (customers.length > 0){
+  <div class="search-container">
+    <!--this keyword connect the input into the keyword property in the ts file-->
+    <!--this keyup calls searchCustomers when user press enter-->
+    <input
+      type="text"
+      placeholder="Search by name, address, phone, or email..."
+      [(ngModel)]="keyword"
+      (keyup)="searchCustomers()"
+    >
 
+    <button type="button" (click)="searchCustomers()">
+      Search
+    </button>
+
+    <button
+      type="button"
+      class="clear-button"
+      (click)="keyword = ''; loadCustomers()"
+    >
+      Clear
+    </button>
+  </div>
+
+<!--  load the customer data-->
+  @if (customers.length > 0) {
     <table>
       <thead>
-
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Address</th>
-        <th>Phone</th>
-        <th>Email</th>
-      </tr>
-
+        <tr>
+          <th>ID</th>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Phone</th>
+          <th>Email</th>
+        </tr>
       </thead>
 
       <tbody>
-      <!--creates a tabel row for every customer in the customers array-->
-      <!--gives unique identifier for each customer-->
-        @for (customer of customers; track customer.id){
+<!--      gives unique identifier to the each customer-->
+        @for (customer of customers; track customer.id) {
           <tr>
             <td>{{ customer.id }}</td>
+            <td>
+              <img
+                [src]="'http://localhost:8080/api/customers/' + customer.id + '/image'"
+                [alt]="customer.name + ' profile image'"
+                class="customer-profile-image"
+                (error)="onImageError($event)"
+              >
+            </td>
             <td>{{ customer.name }}</td>
             <td>{{ customer.address }}</td>
             <td>{{ customer.phone }}</td>
@@ -31,6 +61,30 @@
       </tbody>
     </table>
   } @else {
-    <p>No customers to display</p>
+    <p>No customers to display.</p>
   }
+
+  <div class="pagination-container">
+
+    <button
+      type="button"
+      (click)="previousPage()"
+      [disabled]="currentPage === 0">
+      Previous
+    </button>
+
+    <span>
+      Page {{ currentPage + 1 }} of {{ totalPages }}
+    </span>
+
+    <button
+      type="button"
+      (click)="nextPage()"
+      [disabled]="currentPage >= totalPages - 1 || totalPages === 0">
+      Next
+    </button>
+
+  </div>
+
 </div>
+
