@@ -36,14 +36,25 @@ export class CustomerService {
 
   searchCustomers(keyword: string): Observable<any>{
     //handles spaces and special characters in the search text
+    //sends the request to the backend
     return this.http.get<any>(`${this.apiUrl}/search?keyword=${encodeURIComponent(keyword)}`);
 
   }
 
 
+  //getcustomerbypage(0,5)
   getCustomersByPage(page: number, size: number): Observable<any> {
+
+    //this returns customers data as observable
     return this.http.get<any>(
+      //GET http://localhost:8080/api/customers/page?page=0&size5
       `${this.apiUrl}/page?page=${page}&size=${size}`
+    );
+  }
+
+  searchCustomersByPage(keyword: string, page: number, size: number): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}/search/page?keyword=${encodeURIComponent(keyword)}&page=${page}&size=${size}`
     );
   }
 

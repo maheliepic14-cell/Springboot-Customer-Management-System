@@ -9,6 +9,7 @@ export const routes: Routes = [
   {
     path: "",
     redirectTo: "customers",
+    //Empty route matches the entire empty path
     pathMatch: "full"
   }
 ];

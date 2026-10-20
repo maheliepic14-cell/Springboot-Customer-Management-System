@@ -33,13 +33,17 @@ export class CustomerListComponent implements OnInit{
   constructor(private customerService: CustomerService) {}
 
   //we are calling the method inside ngoninit life cycle hook becuase to display the list of customers
-  //spring calls ngOnInit when the component initializes
+  //when the component initializes the component lifecycle hook trigger so ngOnInIt runs
   ngOnInit(): void{
     this.loadCustomers();
   }
 
   loadCustomers(): void {
+    //initial values are 0, 5
+    //so this calls getcustomerbypage(0,5)
     this.customerService.getCustomersByPage(this.currentPage, this.pageSize).subscribe({
+      //gets observable response data
+      //if this success then onl
       next: (data) => {
         this.customers = data.content;
         this.totalPages = data.totalPages;
@@ -51,20 +55,37 @@ export class CustomerListComponent implements OnInit{
         console.log("Error loading customers:", error);
       }
     });
+  }
 
+  loadCurrentPage(): void {
+    if (this.keyword.trim() === '') {
+      this.loadCustomers();
+      return;
+    }
+
+    this.customerService.searchCustomersByPage(this.keyword.trim(), this.currentPage, this.pageSize).subscribe({
+      next: (data) => {
+        this.customers = data.content;
+        this.totalPages = data.totalPages;
+        this.totalElements = data.totalElements;
+      },
+      error: (error) => {
+        console.error('Error loading page:', error);
+      }
+    });
   }
 
   previousPage(): void {
     if (this.currentPage > 0) {
       this.currentPage--;
-      this.loadCustomers();
+      this.loadCurrentPage();
     }
   }
 
   nextPage(): void {
     if (this.currentPage < this.totalPages - 1) {
       this.currentPage++;
-      this.loadCustomers();
+      this.loadCurrentPage();
     }
   }
 
@@ -79,24 +100,28 @@ export class CustomerListComponent implements OnInit{
     image.src = "/default-profile.png";
   }
 
+
   searchCustomers(): void {
-    if (this.keyword.trim() === ''){
+    this.currentPage = 0;
+
+    if (this.keyword.trim() === '') {
       this.loadCustomers();
       return;
     }
 
-    this.customerService.searchCustomers(this.keyword.trim()).subscribe({
-      next: (data) =>{
-        this.customers = data;
-        console.log("search results", data);
+    this.customerService.searchCustomersByPage(this.keyword.trim(), this.currentPage, this.pageSize).subscribe({
+      next: (data) => {
+        this.customers = data.content;
+        this.totalPages = data.totalPages;
+        this.totalElements = data.totalElements;
+
+        console.log('Search results:', data);
       },
       error: (error) => {
-        console.log("Error searching customers:", error)
-
+        console.error('Error searching customers:', error);
       }
-
-    })
-
+    });
   }
+
 
 }
