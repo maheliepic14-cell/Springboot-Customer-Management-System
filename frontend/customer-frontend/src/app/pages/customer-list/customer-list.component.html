@@ -44,6 +44,9 @@
           <th>Address</th>
           <th>Phone</th>
           <th>Email</th>
+
+          <th>Actions</th>
+
         </tr>
       </thead>
 
@@ -54,16 +57,28 @@
             <td>{{ customer.id }}</td>
             <td>
               <img
-                [src]="'http://localhost:8080/api/customers/' + customer.id + '/image'"
+                [src]="'http://localhost:8080/api/customers/' + customer.id + '/image?v=' + customer.imagePath"
                 [alt]="customer.name + ' profile image'"
                 class="customer-profile-image"
                 (error)="onImageError($event)"
               >
+<!--              [src]="'http://localhost:8080/api/customers/' + customer.id + '/image'"-->
             </td>
             <td>{{ customer.name }}</td>
             <td>{{ customer.address }}</td>
             <td>{{ customer.phone }}</td>
             <td>{{ customer.email }}</td>
+
+            <td>
+              <button
+                type="button"
+                class="edit-button"
+                [routerLink]="['/customers/edit', customer.id]"
+              >
+                Edit
+              </button>
+            </td>
+
           </tr>
         }
       </tbody>

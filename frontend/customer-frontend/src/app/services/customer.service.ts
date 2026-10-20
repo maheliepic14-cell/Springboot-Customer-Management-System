@@ -41,7 +41,6 @@ export class CustomerService {
 
   }
 
-
   //getCustomerByPage(0,5)
   getCustomersByPage(page: number, size: number): Observable<any> {
 
@@ -50,6 +49,11 @@ export class CustomerService {
       //GET http://localhost:8080/api/customers/page?page=0&size5
       `${this.apiUrl}/page?page=${page}&size=${size}`
     );
+  }
+
+  // Get one customer using their ID
+  getCustomerById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
   searchCustomersByPage(keyword: string, page: number, size: number): Observable<any> {
@@ -83,6 +87,18 @@ export class CustomerService {
     //Http post request
     return this.http.post(this.apiUrl, formData);
 
+  }
+
+  updateCustomer(id: number, customer: object, image: File | null):Observable<any>{
+    const formData = new FormData();
+
+    formData.append('customer', new Blob([JSON.stringify(customer)], {type: 'application/json'}));
+
+    if (image) {
+      formData.append('image', image);
+    }
+
+    return this.http.put(`${this.apiUrl}/${id}`, formData);
 
   }
 
