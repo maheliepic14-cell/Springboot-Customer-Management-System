@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {CustomerService} from '../../services/customer.service';
 import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-edit-customer',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './edit-customer.component.html',
   styleUrl: './edit-customer.component.css'
 })
@@ -21,9 +21,19 @@ export class EditCustomerComponent implements OnInit{
     email: ''
   };
 
+  //Store original value
+  originalCustomer = {
+    name: '',
+    address: '',
+    phone: '',
+    email: ''
+  };
+
   selectedImage: File | null = null;
   errorMessage = '';
   successMessage = '';
+  infoMessage = '';
+
   isLoading = true;
   isSubmitting = false;
 
@@ -40,6 +50,8 @@ export class EditCustomerComponent implements OnInit{
           phone: data.phone,
           email: data.email
         };
+
+        this.originalCustomer = { ...this.customer };
 
         this.isLoading = false;
       },
@@ -65,6 +77,7 @@ export class EditCustomerComponent implements OnInit{
   onSubmit(): void {
     this.errorMessage = '';
     this.successMessage = '';
+    this.infoMessage = '';
 
     if (
       !this.customer.name.trim() ||
@@ -76,6 +89,21 @@ export class EditCustomerComponent implements OnInit{
       return;
     }
 
+    const hasDetailsChanged =
+      this.customer.name.trim() !== this.originalCustomer.name.trim() ||
+      this.customer.address.trim() !== this.originalCustomer.address.trim() ||
+      this.customer.phone.trim() !== this.originalCustomer.phone.trim() ||
+      this.customer.email.trim() !== this.originalCustomer.email.trim();
+
+    const hasImageChanged = this.selectedImage !== null;
+
+    // Stop if nothing has changed
+    if (!hasDetailsChanged && !hasImageChanged) {
+      this.infoMessage = 'No changes detected. Your customer details are up to date.';
+      return;
+    }
+
+    // Start submitting only when an update is needed
     this.isSubmitting = true;
 
     this.customerService.updateCustomer(this.customerId, this.customer, this.selectedImage).subscribe({

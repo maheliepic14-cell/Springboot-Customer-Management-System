@@ -102,4 +102,10 @@ export class CustomerService {
 
   }
 
+
+  deleteCustomer(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+
 }

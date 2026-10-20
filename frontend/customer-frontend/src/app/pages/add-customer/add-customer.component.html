@@ -11,7 +11,7 @@
     <p class="success-message">{{ successMessage }}</p>
   }
 
-  <form (ngSubmit)="onSubmit()">
+  <form #customerForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Full Name</label>
       <input
@@ -20,18 +20,48 @@
         name="name"
         placeholder="Enter customer name"
         [(ngModel)]="customer.name"
+        required
+        minlength="2"
+        maxlength="100"
+        #nameField="ngModel"
       >
+
+      @if (nameField.invalid && nameField.touched) {
+        <p class="error-message">
+          @if (nameField.errors?.['required']) {
+            Full name is required.
+          } @else if (nameField.errors?.['minlength']) {
+            Name must contain at least 2 characters.
+          }
+        </p>
+      }
+
     </div>
 
     <div class="form-group">
       <label for="address">Address</label>
+
       <textarea
         id="address"
         name="address"
         rows="3"
         placeholder="Enter customer address"
         [(ngModel)]="customer.address"
+        required
+        minlength="5"
+        #addressField="ngModel"
       ></textarea>
+
+      @if (addressField.invalid && addressField.touched) {
+        <p class="error-message">
+          @if (addressField.errors?.['required']) {
+            Address is required.
+          } @else if (addressField.errors?.['minlength']) {
+            Address must contain at least 5 characters.
+          }
+        </p>
+      }
+
     </div>
 
     <div class="form-group">
@@ -42,7 +72,22 @@
         name="phone"
         placeholder="Enter phone number"
         [(ngModel)]="customer.phone"
+        required
+        pattern="[0-9]{10}"
+        maxlength="10"
+        #phoneField="ngModel"
       >
+
+      @if (phoneField.invalid && phoneField.touched) {
+        <p class="error-message">
+          @if (phoneField.errors?.['required']) {
+            Phone number is required.
+          } @else if (phoneField.errors?.['pattern']) {
+            Phone number must contain exactly 10 digits.
+          }
+        </p>
+      }
+
     </div>
 
     <div class="form-group">
@@ -53,7 +98,23 @@
         name="email"
         placeholder="Enter email address"
         [(ngModel)]="customer.email"
+        required
+        maxlength="100"
+        #emailField="ngModel"
       >
+
+      @if (emailField.invalid && emailField.touched) {
+        <p class="error-message">
+          @if (emailField.errors?.['required']) {
+            Email address is required.
+          } @else if (emailField.errors?.['email']) {
+            Please enter a valid email address.
+          } @else if (emailField.errors?.['maxlength']) {
+            Email address cannot exceed 100 characters.
+          }
+        </p>
+      }
+
     </div>
 
     <div class="form-group">
@@ -68,9 +129,11 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" [disabled]="isSubmitting">
+
+      <button type="submit" [disabled]="isSubmitting || customerForm.invalid">
         {{ isSubmitting ? 'Saving...' : 'Save Customer' }}
       </button>
+
     </div>
 
   </form>

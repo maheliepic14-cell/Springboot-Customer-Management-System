@@ -11,49 +11,117 @@
     <p class="success-message">{{ successMessage }}</p>
   }
 
-  <form (ngSubmit)="onSubmit()">
+  @if (infoMessage) {
+    <p class="info-message">{{ infoMessage }}</p>
+  }
+
+  <form #customerForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="name">Full Name</label>
+
       <input
         type="text"
         id="name"
         name="name"
         placeholder="Enter customer name"
         [(ngModel)]="customer.name"
+        #nameField="ngModel"
+        required
+        minlength="2"
+        maxlength="100"
       >
+
+      @if (nameField.invalid && nameField.touched) {
+        <p class="error-message">
+          @if (nameField.errors?.['required']) {
+            Full name is required.
+          } @else if (nameField.errors?.['minlength']) {
+            Name must contain at least 2 characters.
+          }
+        </p>
+      }
+
     </div>
 
     <div class="form-group">
       <label for="address">Address</label>
+
       <textarea
         id="address"
         name="address"
         rows="3"
         placeholder="Enter customer address"
         [(ngModel)]="customer.address"
+        #addressField="ngModel"
+        required
+        minlength="5"
       ></textarea>
+
+      @if (addressField.invalid && addressField.touched) {
+        <p class="error-message">
+          @if (addressField.errors?.['required']) {
+            Address is required.
+          } @else if (addressField.errors?.['minlength']) {
+            Address must contain at least 5 characters.
+          }
+        </p>
+      }
+
     </div>
 
     <div class="form-group">
       <label for="phone">Phone Number</label>
+
       <input
         type="tel"
         id="phone"
         name="phone"
         placeholder="Enter phone number"
         [(ngModel)]="customer.phone"
+        #phoneField="ngModel"
+        required
+        pattern="[0-9]{10}"
+        maxlength="10"
       >
+
+      @if (phoneField.invalid && phoneField.touched) {
+        <p class="error-message">
+          @if (phoneField.errors?.['required']) {
+            Phone number is required.
+          } @else if (phoneField.errors?.['pattern']) {
+            Phone number must contain exactly 10 digits.
+          }
+        </p>
+      }
+
     </div>
 
     <div class="form-group">
       <label for="email">Email Address</label>
+
       <input
         type="email"
         id="email"
         name="email"
         placeholder="Enter email address"
         [(ngModel)]="customer.email"
+        #emailField="ngModel"
+        required
+        maxlength="100"
       >
+
+      @if (emailField.invalid && emailField.touched) {
+        <p class="error-message">
+          @if (emailField.errors?.['required']) {
+            Email address is required.
+          } @else if (emailField.errors?.['email']) {
+            Please enter a valid email address.
+          } @else if (emailField.errors?.['maxlength']) {
+            Email address cannot exceed 100 characters.
+          }
+        </p>
+      }
+
     </div>
 
     <div class="form-group">
@@ -69,8 +137,18 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" [disabled]="isSubmitting">{{ isSubmitting ? 'Updating...' : 'Update Customer' }}</button>
-      <button type="button" class="cancel-button">Cancel</button>
+
+      <button
+        type="submit"
+        [disabled]="isSubmitting || isLoading"
+      >
+        {{ isSubmitting ? 'Updating...' : 'Update Customer' }}
+      </button>
+
+      <button type="button" class="cancel-button" routerLink="/customers">
+        Cancel
+      </button>
+
     </div>
   </form>
 </div>

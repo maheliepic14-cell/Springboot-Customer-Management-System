@@ -1,36 +1,44 @@
 
 .edit-customer-page {
   max-width: 700px;
-  margin: 30px auto;
-  padding: 30px;
-  background-color: #202326;
+  margin: 35px auto;
+  padding: 32px;
+  background: linear-gradient(145deg, #222629, #1c1f22);
   color: #f5f5f5;
   border: 1px solid #36393d;
-  border-radius: 10px;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
 }
 
 .edit-customer-page h2 {
   margin: 0 0 8px;
   color: #c6a57a;
+  font-size: 26px;
+  font-weight: 600;
 }
 
 .description {
-  margin-bottom: 28px;
-  color: #b0b0b0;
+  margin: 0 0 30px;
+  color: #aeb3b8;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
+/* Form layout */
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .form-group label {
+  color: #e2e2e2;
   font-size: 14px;
   font-weight: 500;
 }
 
+/* Text inputs and textarea */
 .form-group input:not([type="file"]),
 .form-group textarea {
   width: 100%;
@@ -39,99 +47,180 @@
   background-color: #292d31;
   color: #f5f5f5;
   border: 1px solid #44484d;
-  border-radius: 6px;
+  border-radius: 7px;
   font: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-group input:focus,
+.form-group input:not([type="file"]):focus,
 .form-group textarea:focus {
   outline: none;
   border-color: #c6a57a;
+  box-shadow: 0 0 0 3px rgba(198, 165, 122, 0.12);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #999;
+  color: #858b91;
 }
 
 .form-group textarea {
   resize: vertical;
+  min-height: 90px;
 }
 
+/* File input */
 .form-group input[type="file"] {
   width: 100%;
-  color: #b0b0b0;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: #292d31;
+  color: #bfc3c7;
+  border: 1px solid #44484d;
+  border-radius: 7px;
   font: inherit;
+  font-size: 13px;
+}
+
+.form-group input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 12px;
+  background-color: #3b3f43;
+  color: #f5f5f5;
+  border: 1px solid #50555a;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-group input[type="file"]::file-selector-button:hover {
+  background-color: #4a4f54;
 }
 
 .form-group small {
-  color: #999;
+  color: #92989e;
   font-size: 12px;
+  line-height: 1.5;
 }
 
+/* Main error message */
+.error-message {
+  margin: 0 0 20px;
+  padding: 11px 14px;
+  background-color: #382326;
+  color: #ff9298;
+  border: 1px solid #754047;
+  border-radius: 7px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Inline validation errors: text only */
+.form-group .error-message {
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: #ff858c;
+  border: none;
+  border-radius: 0;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Highlight invalid fields after interaction */
+.form-group input.ng-invalid.ng-touched:not([type="file"]),
+.form-group textarea.ng-invalid.ng-touched {
+  border-color: #b95b63;
+}
+
+.form-group input.ng-invalid.ng-touched:focus,
+.form-group textarea.ng-invalid.ng-touched:focus {
+  box-shadow: 0 0 0 3px rgba(255, 133, 140, 0.1);
+}
+
+/* Success message */
+.success-message {
+  margin: 0 0 20px;
+  padding: 11px 14px;
+  background-color: #24372c;
+  color: #8ee0a5;
+  border: 1px solid #3e694b;
+  border-radius: 7px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Informational message: subtle blue-grey */
+.info-message {
+  margin: 0 0 20px;
+  padding: 11px 14px;
+  background-color: rgba(120, 150, 180, 0.09);
+  color: #b8c7d9;
+  border: 1px solid rgba(120, 150, 180, 0.25);
+  border-radius: 7px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Buttons */
 .form-actions {
   display: flex;
   gap: 12px;
-  margin-top: 28px;
+  margin-top: 30px;
 }
 
 .form-actions button {
-  padding: 11px 20px;
+  padding: 12px 22px;
   background-color: #36393d;
   color: #f5f5f5;
   border: 1px solid #4a4e53;
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease, border-color 0.2s ease,
+  transform 0.2s ease;
 }
 
-.form-actions button:hover {
+.form-actions button:hover:not(:disabled) {
   background-color: #484d52;
+  border-color: #62676d;
+  transform: translateY(-1px);
 }
 
 .form-actions .cancel-button {
   background-color: transparent;
   color: #b0b0b0;
+  border-color: #44484d;
 }
 
-.form-actions .cancel-button:hover {
+.form-actions .cancel-button:hover:not(:disabled) {
   background-color: #292d31;
   color: #f5f5f5;
 }
 
+.form-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive layout */
 @media (max-width: 600px) {
   .edit-customer-page {
-    margin: 16px auto;
-    padding: 20px;
+    margin: 16px;
+    padding: 22px;
+  }
+
+  .edit-customer-page h2 {
+    font-size: 23px;
   }
 
   .form-actions {
     flex-wrap: wrap;
   }
-}
 
-
-.error-message {
-  margin-bottom: 20px;
-  padding: 12px 14px;
-  background-color: #3a2426;
-  color: #ff8b8b;
-  border: 1px solid #754044;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.success-message {
-  margin-bottom: 20px;
-  padding: 12px 14px;
-  background-color: #24372c;
-  color: #8ee0a5;
-  border: 1px solid #3e694b;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.form-actions button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  .form-actions button {
+    flex: 1;
+  }
 }

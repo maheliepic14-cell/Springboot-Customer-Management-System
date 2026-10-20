@@ -10,6 +10,9 @@
     + Add Customer
   </button>
 
+<!--  display this only there is a errorMessage-->
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
   <div class="search-container">
     <!--this keyword connect the input into the keyword property in the ts file-->
     <!--this keyup calls searchCustomers when user press enter-->
@@ -35,6 +38,7 @@
 
 <!--  load the customer data-->
   @if (customers.length > 0) {
+    <div class="customer-table-wrapper">
     <table>
       <thead>
         <tr>
@@ -69,7 +73,7 @@
             <td>{{ customer.phone }}</td>
             <td>{{ customer.email }}</td>
 
-            <td>
+            <td class="action-buttons">
               <button
                 type="button"
                 class="edit-button"
@@ -77,12 +81,24 @@
               >
                 Edit
               </button>
+
+              <button
+                type="button"
+                class="delete-button"
+                (click)="deleteCustomer(customer.id)"
+                [disabled]="isDeleting"
+              >
+                Delete
+              </button>
+
             </td>
+
 
           </tr>
         }
       </tbody>
     </table>
+    </div>
   } @else {
     <p>No customers to display.</p>
   }

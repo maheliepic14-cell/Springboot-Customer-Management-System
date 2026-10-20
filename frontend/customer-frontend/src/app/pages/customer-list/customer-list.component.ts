@@ -2,12 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {CustomerService} from '../../services/customer.service';
 import {FormsModule} from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-customer-list',
   standalone: true,
   imports: [
-    FormsModule, RouterLink
+    FormsModule, RouterLink, CommonModule
   ],
   templateUrl: './customer-list.component.html',
   styleUrl: './customer-list.component.css'
@@ -29,6 +30,9 @@ export class CustomerListComponent implements OnInit{
   pageSize: number = 5;
   totalPages: number = 0;
   totalElements: number = 0;
+
+  isDeleting = false;
+  errorMessage = '';
 
   //inject the customer service through constructor
   constructor(private customerService: CustomerService) {}
@@ -125,4 +129,28 @@ export class CustomerListComponent implements OnInit{
   }
 
 
+  deleteCustomer(id: number): void {
+    const confirmed = confirm('Are you sure you want to delete this customer? This action cannot be undone.');
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.errorMessage = '';
+    this.isDeleting = true;
+
+    this.customerService.deleteCustomer(id).subscribe({
+      next: () => {
+        this.isDeleting = false;
+        this.loadCurrentPage();
+      },
+      error: (error) => {
+        console.error('Error deleting customer:', error);
+
+        this.errorMessage = error.error?.message || 'Failed to delete customer. Please try again.';
+
+        this.isDeleting = false;
+      }
+    });
+  }
 }
